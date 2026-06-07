@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GemiChat — AI by Kïzïtö</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Product+Sans:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --g-blue: #4285F4;
+    --g-red: #EA4335;
+    --g-yellow: #FBBC05;
+    --g-green: #34A853;
+    --gpt-green: #10a37f;
+    --gpt-dark: #202123;
+    --bg: #f8f9fa;
+    --surface: #ffffff;
+    --sidebar: #202123;
+    --sidebar-hover: #2a2b32;
+    --sidebar-text: #ececf1;
+    --sidebar-muted: #8e8ea0;
+    --text: #202124;
+    --muted: #5f6368;
+    --border: #e0e0e0;
+    --radius: 12px;
+    --font: 'Google Sans', 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    background: var(--sidebar);
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px 16px;
+    border-bottom: 1px solid #3a3b3f;
+    margin-bottom: 6px;
+  }
+  .logo-gem {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #4285F4 0%, #EA4335 35%, #FBBC05 65%, #34A853 100%);
+    font-size: 16px; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
+  .logo-name {
+    font-size: 17px; font-weight: 600;
+    color: white; letter-spacing: -0.3px;
+  }
+  .logo-name span { color: #8e8ea0; font-weight: 400; font-size: 12px; display: block; margin-top: -1px; }
+  .new-chat-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid #3a3b3f;
+    border-radius: 8px;
+    color: var(--sidebar-text);
+    cursor: pointer;
+    font-size: 14px;
+    background: transparent;
+    width: 100%;
+    transition: background 0.15s;
+    margin-bottom: 8px;
+  }
+  .new-chat-btn:hover { background: var(--sidebar-hover); }
+  .new-chat-btn svg { opacity: 0.7; }
+  .sidebar-section {
+    font-size: 11px; font-weight: 600;
+    color: var(--sidebar-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 8px 12px 4px;
+  }
+  .chat-history-item {
+    padding: 9px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13.5px;
+    color: var(--sidebar-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: background 0.15s, color 0.15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .chat-history-item:hover { background: var(--sidebar-hover); color: var(--sidebar-text); }
+  .chat-history-item.active { background: var(--sidebar-hover); color: var(--sidebar-text); }
+  .sidebar-bottom {
+    margin-top: auto;
+    border-top: 1px solid #3a3b3f;
+    padding-top: 12px;
+  }
+  .user-chip {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .user-chip:hover { background: var(--sidebar-hover); }
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, #4285F4, #34A853);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: white; flex-shrink: 0;
+  }
+  .user-info { flex: 1; overflow: hidden; }
+  .user-info .name { font-size: 13.5px; color: var(--sidebar-text); font-weight: 500; }
+  .user-info .plan { font-size: 11px; color: var(--sidebar-muted); }
+
+  /* MAIN */
+  .main {
+    flex: 1; display: flex; flex-direction: column; min-width: 0;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 24px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .model-selector {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px; font-weight: 500;
+    background: var(--surface);
+    color: var(--text);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .model-selector:hover { border-color: #4285F4; box-shadow: 0 0 0 2px rgba(66,133,244,0.12); }
+  .model-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .topbar-actions { display: flex; gap: 8px; }
+  .topbar-btn {
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13.5px; font-weight: 500;
+    cursor: pointer; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted);
+    transition: all 0.15s;
+  }
+  .topbar-btn:hover { border-color: #4285F4; color: #4285F4; }
+  .topbar-btn.primary {
+    background: #4285F4; color: white; border-color: #
